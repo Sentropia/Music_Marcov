@@ -2,7 +2,7 @@ from pathlib import Path
 from collections import Counter, defaultdict
 import pickle
 
-PROJECT_DIR = Path.home() / "Desktop" / "project"
+PROJECT_DIR = Path(__file__).resolve().parent
 STATES_CACHE = PROJECT_DIR / "all_states.pkl"
 MODEL_CACHE = PROJECT_DIR / "markov_model.pkl"
 
