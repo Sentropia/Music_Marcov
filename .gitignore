@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.pyc
+generated_music.mid
+all_states.pkl
+BiMMuDa/
+CRE/
+MIDI_Dataset/
+Monophonic_Dataset/
