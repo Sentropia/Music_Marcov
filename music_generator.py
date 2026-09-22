@@ -8,9 +8,11 @@ from io import BytesIO
 from pathlib import Path
 import pickle
 import random
-
+import wave
 import pretty_midi
-
+import os
+import fluidsynth
+import lameenc
 
 PROJECT_DIR = Path(__file__).resolve().parent
 MODEL_PATH = PROJECT_DIR / "markov_model.pkl"
@@ -205,3 +207,74 @@ def generate_midi_bytes(order: object, seed: int | None = None) -> bytes:
     output = BytesIO()
     midi.write(output)
     return output.getvalue()
+def midi_bytes_to_mp3(midi_data: bytes) -> bytes:
+    """Render MIDI bytes to MP3 using FluidSynth and LAME."""
+    import os
+    import subprocess
+    import tempfile
+
+    soundfont = os.environ.get("SOUNDFONT_PATH")
+
+    if not soundfont:
+        raise RuntimeError("SOUNDFONT_PATH is not configured.")
+
+    if not Path(soundfont).exists():
+        raise FileNotFoundError(f"SoundFont not found: {soundfont}")
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        temp_path = Path(temp_dir)
+        midi_path = temp_path / "music.mid"
+        wav_path = temp_path / "music.wav"
+
+        midi_path.write_bytes(midi_data)
+
+        result = subprocess.run(
+            [
+                "fluidsynth",
+                "-ni",
+                "-F",
+                str(wav_path),
+                "-r",
+                "44100",
+                soundfont,
+                str(midi_path),
+            ],
+            capture_output=True,
+            text=True,
+            timeout=60,
+        )
+
+        if result.returncode != 0:
+            raise RuntimeError(
+                f"FluidSynth failed: {result.stderr.strip()}"
+            )
+
+        if not wav_path.exists():
+            raise RuntimeError("FluidSynth did not produce an audio file.")
+
+        # Read the WAV container and extract its raw PCM frames.
+        with wave.open(str(wav_path), "rb") as wav_file:
+            sample_rate = wav_file.getframerate()
+            channels = wav_file.getnchannels()
+            sample_width = wav_file.getsampwidth()
+            pcm_data = wav_file.readframes(wav_file.getnframes())
+
+    if sample_width != 2:
+        raise RuntimeError(
+            f"Unexpected FluidSynth sample width: {sample_width} bytes."
+        )
+
+    encoder = lameenc.Encoder()
+    encoder.set_bit_rate(192)
+    encoder.set_in_sample_rate(sample_rate)
+    encoder.set_channels(channels)
+    encoder.set_quality(2)
+
+    mp3_data = encoder.encode(pcm_data)
+    mp3_data += encoder.flush()
+
+    return mp3_data
+def generate_mp3_bytes(order: object, seed: int | None = None) -> bytes:
+    """Generate Markov music and return it as MP3 bytes."""
+    midi_data = generate_midi_bytes(order, seed=seed)
+    return midi_bytes_to_mp3(midi_data)

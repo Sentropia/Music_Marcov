@@ -1,7 +1,6 @@
 services:
   - type: web
     name: markov-music-generator
-    runtime: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn --bind 0.0.0.0:$PORT webapp:app
+    runtime: docker
     healthCheckPath: /healthz
+

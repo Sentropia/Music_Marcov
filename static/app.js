@@ -7,7 +7,7 @@ form.addEventListener("submit", async (event) => {
   const order = new FormData(form).get("order");
   button.disabled = true;
   status.className = "status";
-  status.textContent = "Generating your MIDI…";
+  status.textContent = "Generating your music…";
 
   try {
     const response = await fetch("/api/generate", {
@@ -30,7 +30,7 @@ form.addEventListener("submit", async (event) => {
     link.remove();
     window.setTimeout(() => URL.revokeObjectURL(url), 0);
     status.className = "status success";
-    status.textContent = "Your MIDI file is ready to download.";
+    status.textContent = "Your music is ready to download.";
   } catch (error) {
     status.className = "status error";
     status.textContent = error.message || "Generation failed. Please try again.";
