@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Markov Music Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <main class="hero">
+      <section class="panel" aria-labelledby="title">
+        <p class="eyebrow">GENERATIVE MUSIC ENGINE</p>
+        <h1 id="title">Markov Music</h1>
+        <p class="description">Create a unique piano performance from the bundled Markov model.</p>
+
+        <form id="generator-form">
+          <fieldset>
+            <legend>Markov order</legend>
+            <div class="order-options" role="radiogroup" aria-label="Markov order">
+              {% for order in range(min_order, max_order + 1) %}
+              <label>
+                <input type="radio" name="order" value="{{ order }}" {% if order == 5 %}checked{% endif %}>
+                <span>{{ order }}</span>
+              </label>
+              {% endfor %}
+            </div>
+          </fieldset>
+          <button id="generate-button" type="submit">Generate music</button>
+        </form>
+
+        <p id="status" class="status" role="status" aria-live="polite">Ready to generate.</p>
+        <section id="player-container" class="player" hidden aria-label="Generated music">
+          <audio id="audio-player" controls preload="metadata"></audio>
+          <a id="download-link" class="download-link" download="markov_music.mp3">Download MP3</a>
+        </section>
+        <p class="note">240 piano notes · 100 BPM · MP3 audio</p>
+      </section>
+    </main>
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+  </body>
+</html>

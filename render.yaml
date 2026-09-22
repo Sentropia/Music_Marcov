@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: markov-music-generator
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /healthz

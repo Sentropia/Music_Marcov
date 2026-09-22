@@ -1,0 +1,25 @@
+:root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; background: radial-gradient(circle at top, #241751, #090816 58%); color: #f6f4ff; }
+.hero { min-height: 100vh; display: grid; place-items: center; padding: 2rem; background: linear-gradient(135deg, rgba(6, 5, 15, .9), rgba(23, 14, 55, .72)); }
+.panel { width: min(100%, 640px); padding: clamp(2rem, 8vw, 4.5rem); border: 1px solid rgba(255,255,255,.16); border-radius: 24px; background: rgba(12, 10, 27, .79); box-shadow: 0 24px 80px rgba(0,0,0,.4); backdrop-filter: blur(9px); text-align: center; }
+.eyebrow { margin: 0; color: #a89aff; font-size: .74rem; font-weight: 800; letter-spacing: .16em; }
+h1 { margin: .55rem 0; font-size: clamp(2.5rem, 9vw, 5.25rem); line-height: 1; }
+.description { margin: 0 auto 2.5rem; max-width: 34rem; color: #c5c0d6; line-height: 1.6; }
+fieldset { margin: 0 0 1.4rem; padding: 0; border: 0; }
+legend { margin-bottom: .8rem; color: #d7d2e9; font-weight: 700; }
+.order-options { display: flex; flex-wrap: wrap; justify-content: center; gap: .55rem; }
+.order-options input { position: absolute; opacity: 0; }
+.order-options span { display: grid; width: 2.7rem; aspect-ratio: 1; place-items: center; border: 1px solid #393357; border-radius: 10px; color: #c8c1df; cursor: pointer; transition: .18s ease; }
+.order-options input:checked + span { border-color: #937dff; background: #7558f2; color: white; box-shadow: 0 0 0 3px rgba(117,88,242,.25); }
+.order-options input:focus-visible + span, button:focus-visible { outline: 3px solid #b1a1ff; outline-offset: 3px; }
+button { width: 100%; padding: 1rem 1.3rem; border: 0; border-radius: 12px; background: linear-gradient(135deg, #7558f2, #4d8cff); color: white; cursor: pointer; font: inherit; font-weight: 800; transition: transform .18s ease, opacity .18s ease; }
+button:hover:not(:disabled) { transform: translateY(-2px); }
+button:disabled { cursor: wait; opacity: .65; }
+.status { min-height: 1.5rem; margin: 1.35rem 0 .45rem; color: #c8c1df; }
+.status.error { color: #ff9aa8; }.status.success { color: #8ce0b3; }
+.player { display: grid; gap: .75rem; margin-top: 1.25rem; }
+.player[hidden] { display: none; }
+audio { width: 100%; }
+.download-link { color: #fff; font-weight: 700; }
+.note { margin: 0; color: #918aa9; font-size: .85rem; }
